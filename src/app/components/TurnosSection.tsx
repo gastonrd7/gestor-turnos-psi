@@ -26,9 +26,31 @@ export default function TurnosSection() {
                   {c.specialty} · {new Date(c.startUtc).toLocaleDateString("es-AR", { weekday:"short", day:"2-digit", month:"2-digit" })} ·
                   {" "}{new Date(c.startUtc).toLocaleTimeString("es-AR", { hour:"2-digit", minute:"2-digit" })}
                 </div>
-                <div className="text-gray-600 text-xs">
-                  Paciente: {c.paciente.nombre} {c.paciente.apellido} · {c.paciente.email} · {c.paciente.celular}
+                <div className="text-sm text-gray-600">
+                  Modalidad:{" "}
+                  <span className="font-medium capitalize">
+                    {c.modalidad}
+                  </span>
                 </div>
+                {c.modalidad === "online" && c.meetUrl && (
+                  <div className="text-sm text-gray-600">
+                    Enlace de Meet:{" "}
+                    <a
+                      href={c.meetUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-indigo-600 underline"
+                    >
+                      {c.meetUrl}
+                    </a>
+                  </div>
+                )}
+                {c.modalidad === "presencial" && c.direccionConsultorio && (
+                    <div className="text-sm text-gray-600">
+                      Dirección del consultorio:{" "}
+                      <span className="font-medium">{c.direccionConsultorio}</span>
+                    </div>
+                  )}
                 <div className="mt-3">
                   <button
                     onClick={async () => {

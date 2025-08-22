@@ -6,6 +6,8 @@ export type Specialty =
   | "Autoestima"
   | "Estrés";
 
+export type Modalidad = "online" | "presencial";
+
 export interface Professional {
   id: string;
   nombre: string;
@@ -13,6 +15,8 @@ export interface Professional {
   timezone: string;
   avatar?: string;
   isLow: boolean;
+  modalidades: Modalidad[]; // NUEVO: para saber qué tipo de sesiones ofrece
+  direccionConsultorio: string | null;
 }
 
 export interface Turno {
@@ -20,6 +24,7 @@ export interface Turno {
   professionalId: string;
   startUtc: string;
   endUtc: string;
+  modalidad: Modalidad; // NUEVO: define si ese horario es online o presencial
 }
 
 export interface BookedSession {
@@ -28,6 +33,7 @@ export interface BookedSession {
   startUtc: string;
   endUtc: string;
   specialty: Specialty;
+  modalidad: Modalidad; // NUEVO: el paciente también guarda la modalidad elegida
 }
 
 export interface ConfirmedSession extends BookedSession {
@@ -37,5 +43,7 @@ export interface ConfirmedSession extends BookedSession {
     email: string;
     celular: string;
   };
-  confirmedAt: string; 
+  confirmedAt: string;
+  meetUrl: string | null;
+  direccionConsultorio: string | null;
 }

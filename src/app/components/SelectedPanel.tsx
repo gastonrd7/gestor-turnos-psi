@@ -38,11 +38,23 @@ export default function SelectedPanel() {
               <li key={b.turnoId} className="rounded-xl border p-3 text-xs">
                 <div className="font-medium text-gray-800">{pro?.nombre ?? "Profesional"}</div>
                 <div className="text-gray-600">{b.specialty ?? "Especialidad"} · {toLocalDate(b.startUtc)} · {toLocalTime(b.startUtc)}</div>
+                <div className="text-sm text-gray-600">
+                  Modalidad:{" "}
+                  <span className="font-medium capitalize">
+                    {b.modalidad === "online" ? "Online" : "Presencial"}
+                  </span>
+                </div>
+                {pro?.direccionConsultorio && (
+                  <div className="text-sm text-gray-600">
+                    Dirección del consultorio:{" "}
+                    <span className="font-medium">{pro?.direccionConsultorio}</span>
+                  </div>
+                )}
                 <div className="mt-2 flex gap-2">
                   <button
                     onClick={async () => {
                       const res = await dispatch(toggleTurno({
-                        slot: { id: b.turnoId, professionalId: b.professionalId, startUtc: b.startUtc, endUtc: b.endUtc },
+                        slot: { id: b.turnoId, professionalId: b.professionalId, startUtc: b.startUtc, endUtc: b.endUtc, modalidad: b.modalidad },
                         pro: pro!,
                       }));
                       if (toggleTurno.fulfilled.match(res)) toast("Turno deseleccionado");
@@ -63,10 +75,6 @@ export default function SelectedPanel() {
           })}
         </ul>
       )}
-
-      <div className="mt-4 rounded-xl bg-indigo-50 p-3 text-xs text-indigo-800 ring-1 ring-indigo-200">
-        * Las sesiones son online.
-      </div>
 
       {/* Modal de confirmación */}
       {confirmOpen && (

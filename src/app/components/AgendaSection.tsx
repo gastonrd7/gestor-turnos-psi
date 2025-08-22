@@ -9,7 +9,7 @@ import {
   toggleSpecialty,
   clearSpecialties,
 } from "@/store/sessionsSlice";
-import type { Turno } from "@/domain/types";
+import type { Turno, Modalidad } from "@/domain/types";
 import toast from "react-hot-toast";
 
 import {
@@ -27,17 +27,16 @@ export default function AgendaSection() {
   const dispatch = useAppDispatch();
   const state = useAppSelector((s) => s.sessions);
 
-  // Cargar datos base una vez
+  const [selectedModalidad, setSelectedModalidad] = useState<Modalidad | "todas">("todas");
+
   useEffect(() => {
     dispatch(loadInitial());
   }, [dispatch]);
 
-  // Ventana desde MAÑANA por 15 días
   const today = startOfDay(new Date());
-  const windowStart = addDays(today, 1); // mañana
-  const windowEnd = addDays(windowStart, 15); // exclusivo (mañana + 15)
+  const windowStart = addDays(today, 1);
+  const windowEnd = addDays(windowStart, 15);
 
-  // Navegación semanal (anclada a la semana que contiene “mañana”)
   const minWeekStart = startOfWeekMonday(windowStart);
   const maxWeekStart = startOfWeekMonday(addDays(windowEnd, -1));
   const [weekOffset, setWeekOffset] = useState(0);
@@ -47,23 +46,23 @@ export default function AgendaSection() {
   const canNext = visibleWeekStart.getTime() < maxWeekStart.getTime();
 
   useEffect(() => {
-    // clamp defensivo
     if (visibleWeekStart < minWeekStart) setWeekOffset(0);
     if (visibleWeekStart > maxWeekStart) setWeekOffset(0);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [visibleWeekStart, minWeekStart, maxWeekStart]);
 
-  // Filtro multi-especialidad
   const filteredProfessionals = useMemo(() => {
-    if (!state.selectedSpecialties.length) return state.professionals;
-    return state.professionals.filter((p) =>
-      p.especialidades.some((e) => state.selectedSpecialties.includes(e))
-    );
-  }, [state.professionals, state.selectedSpecialties]);
+    return state.professionals.filter((p) => {
+      const matchesModalidad =
+        selectedModalidad === "todas" || p.modalidades.includes(selectedModalidad);
+      const matchesSpecialty =
+        state.selectedSpecialties.length === 0 ||
+        p.especialidades.some((e) => state.selectedSpecialties.includes(e));
+      return matchesModalidad && matchesSpecialty;
+    });
+  }, [state.professionals, state.selectedSpecialties, selectedModalidad]);
 
   const isBooked = (turnoId: string) => state.booked.some((b) => b.turnoId === turnoId);
 
-  // Toggle visual por profesional (no toca store)
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const isExpanded = (proId: string) => !!expanded[proId];
   const toggleExpanded = (proId: string, open?: boolean) =>
@@ -73,7 +72,18 @@ export default function AgendaSection() {
     <>
       {/* Filtros */}
       <div className="mb-4 flex flex-wrap items-center gap-2">
-        <span className="mr-2 text-sm font-medium text-gray-700">Temáticas:</span>
+        <label className="text-sm font-medium text-gray-700">Modalidad:</label>
+        <select
+          value={selectedModalidad}
+          onChange={(e) => setSelectedModalidad(e.target.value as Modalidad | "todas")}
+          className="rounded border border-gray-300 bg-white px-2 py-1 text-sm"
+        >
+          <option value="todas">Todas</option>
+          <option value="online">Online</option>
+          <option value="presencial">Presencial</option>
+        </select>
+
+        <span className="ml-4 mr-2 text-sm font-medium text-gray-700">Temáticas:</span>
         {state.specialties.map((t) => {
           const active = state.selectedSpecialties.includes(t);
           return (
@@ -142,11 +152,9 @@ export default function AgendaSection() {
         <div className="mt-4 flex flex-col gap-4">
           {filteredProfessionals.map((pro) => {
             const slots = state.weeklySlots[pro.id];
-            const grouped = slots ? groupSlotsByDate(slots) : undefined;
+            const filteredSlots = selectedModalidad === "todas" ? slots : slots?.filter(slot => slot.modalidad === selectedModalidad);
+            const grouped = slots ? groupSlotsByDate(filteredSlots) : undefined;
 
-            // Badge “Baja disponibilidad”:
-            // - Antes de cargar → visible (posible baja)
-            // - Cargado → real si total < 20
             const isLow = slots === undefined ? true : slots.length < 20;
 
             return (
@@ -179,10 +187,15 @@ export default function AgendaSection() {
                           </span>
                         ))}
                       </div>
+                      <div>
+                        <p className="text-sm text-gray-500">
+                          Modalidades: {pro.modalidades.join(" / ")}
+                        </p>
+                      </div>
                     </div>
                   </div>
 
-                  {/* Botón Mostrar/Ocultar (solo UI, no borra store) */}
+                  {/* Botón Mostrar/Ocultar */}
                   <div className="flex gap-2">
                     {!slots ? (
                       <button
@@ -213,7 +226,6 @@ export default function AgendaSection() {
                   </div>
                 </div>
 
-                {/* Semana visible (solo si expandido) */}
                 {isExpanded(pro.id) && (
                   <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-7">
                     {visibleDays.map((date) => {
@@ -265,15 +277,17 @@ export default function AgendaSection() {
                                         toast.error(res.payload as string);
                                       }
                                     }}
-                                    className={`rounded-lg px-2 py-1 ring-1 transition disabled:cursor-not-allowed ${
+                                    className={`w-full rounded-xl border px-3 py-2 text-center text-xs font-medium leading-tight shadow-sm disabled:cursor-not-allowed ${
                                       booked
-                                        ? "bg-green-600 text-white ring-green-600"
-                                        : "bg-white ring-gray-200 hover:bg-indigo-50"
+                                        ? "bg-green-600 text-white border-green-600"
+                                        : "bg-white text-gray-800 border-gray-300 hover:bg-indigo-50"
                                     }`}
                                     title={`${new Date(s.startUtc).toLocaleString("es-AR")}`}
                                   >
-                                    {formatTime(s.startUtc)}
+                                    <div className="font-semibold">{formatTime(s.startUtc)}</div>
+                                    <div className="text-[10px] text-gray-500">{s.modalidad}</div>
                                   </button>
+
                                 );
                               })
                             ) : (

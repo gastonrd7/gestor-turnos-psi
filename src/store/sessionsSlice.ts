@@ -101,6 +101,7 @@ export const toggleTurno = createAsyncThunk<
       startUtc: slot.startUtc,
       endUtc: slot.endUtc,
       specialty: chosen,
+      modalidad: slot.modalidad
     };
     return { added };
   }
@@ -135,17 +136,26 @@ export const confirmTurno = createAsyncThunk<
       endUtc: b.endUtc,
       specialty: b.specialty,
       paciente: { nombre, apellido, email, celular },
+      modalidad: b.modalidad
     });
+
+    const pro = getState().sessions.professionals.find(p => p.id === b.professionalId);
 
     // 2) Refetch de slots del profesional (ya sin ese turno)
     const refreshedSlots = await apiFetchWeeklySlots(b.professionalId);
+
+    const mockGoogleMeetUrl = "https://meet.google.com/abc-defg-hij";
 
     // 3) Armado del objeto ConfirmedSession
     const confirmed: ConfirmedSession = {
       ...b,
       paciente: { nombre, apellido, email, celular },
       confirmedAt: new Date().toISOString(),
+      meetUrl: b.modalidad === "online" ? mockGoogleMeetUrl : null,
+      direccionConsultorio: b.modalidad === "presencial" ? pro?.direccionConsultorio ?? null : null,
     };
+
+    console.log('confirmed', confirmed)
 
     return { confirmed, proId: b.professionalId, slots: refreshedSlots };
   }
@@ -248,6 +258,7 @@ const sessionsSlice = createSlice({
                 professionalId: proId,
                 startUtc: b.startUtc,
                 endUtc: b.endUtc,
+                modalidad: b.modalidad
               };
               if (!list.some((t) => t.id === slot.id)) {
                 insertSorted(list, slot);
