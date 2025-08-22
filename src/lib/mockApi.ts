@@ -13,9 +13,9 @@ const confirmedDB: Array<{
 
 const professionals: Professional[] = [
   { id: "p1", nombre: "Dra. Sofía Martínez", especialidades: ["Ansiedad","Estrés","Autoestima"], timezone: "America/Argentina/Buenos_Aires", isLow: true },
-  { id: "p2", nombre: "Lic. Tomás Rivas",     especialidades: ["Relaciones","Depresión","Ansiedad"], timezone: "America/Montevideo",  isLow: true },
-  { id: "p3", nombre: "Dra. Valentina López", especialidades: ["Fobias","Relaciones","Autoestima"], timezone: "America/Santiago",  isLow: false },
-  { id: "p4", nombre: "Lic. Javier Duarte",   especialidades: ["Depresión","Estrés"], timezone: "America/Sao_Paulo",  isLow: false },
+  { id: "p2", nombre: "Lic. Tomás Rivas",     especialidades: ["Relaciones","Depresión","Ansiedad"], timezone: "America/Argentina/Buenos_Aires",  isLow: true },
+  { id: "p3", nombre: "Dra. Valentina López", especialidades: ["Fobias","Relaciones","Autoestima"], timezone: "America/Argentina/Buenos_Aires",  isLow: false },
+  { id: "p4", nombre: "Lic. Javier Duarte",   especialidades: ["Depresión","Estrés"], timezone: "America/Argentina/Buenos_Aires",  isLow: false },
 ];
 
 const allSpecialties: Specialty[] = ["Fobias","Relaciones","Depresión","Ansiedad","Autoestima","Estrés"];
@@ -143,7 +143,7 @@ export async function apiFetchWeeklySlots(proId: string): Promise<Turno[]> {
 
   return available;
 }
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function apiBookTurno(_turnoId: string): Promise<{ ok: true }> {
   await new Promise(r => setTimeout(r, 120));
   return { ok: true };
