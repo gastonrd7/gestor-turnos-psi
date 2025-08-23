@@ -6,6 +6,8 @@ export type Specialty =
   | "Autoestima"
   | "Estrés";
 
+export type Slot = { id: string; startUtc: string };
+
 export type Modalidad = "online" | "presencial";
 
 export interface Professional {
@@ -24,8 +26,11 @@ export interface Turno {
   professionalId: string;
   startUtc: string;
   endUtc: string;
-  modalidad: Modalidad; // NUEVO: define si ese horario es online o presencial
+  modalidad: Modalidad;
 }
+
+// types.ts o domain/types.ts
+
 
 export interface BookedSession {
   turnoId: string;
