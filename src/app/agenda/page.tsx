@@ -2,7 +2,7 @@
 "use client";
 import dynamic from "next/dynamic";
 
-const AgendaSection = dynamic(() => import("../components/AgendaSection"), { ssr: false });
+const AgendaSection = dynamic(() => import("../components/CalendarSection"), { ssr: false });
 const SelectedPanel = dynamic(() => import("../components/SelectedPanel"), { ssr: false });
 
 export default function AgendaPage() {

@@ -63,22 +63,88 @@ const allSpecialties: Specialty[] = [
 // Nuevos slots por modalidad
 const weeklySlotsByPro: Record<string, Record<Modalidad, string[][]>> = {
   p1: {
-    online: [["10:00", "12:00"], ["09:00", "11:00"], [], [], [], [], []],
-    presencial: [["15:00"], ["18:00"], ["11:00", "15:00"], ["09:00", "18:00"], ["09:00", "11:00"], [], ["10:00"]],
+    online: [
+      [], // Domingo
+      ["10:00", "12:00", "15:00"], // Lunes
+      [], // Martes
+      ["09:00", "11:00", "16:00"], // Miércoles
+      [], // Jueves
+      ["10:00", "14:00", "17:00"], // Viernes
+      [], // Sábado
+    ],
+    presencial: [
+      [], // Domingo
+      [], // Lunes
+      ["09:00", "11:00", "13:00"], // Martes
+      [], // Miércoles
+      ["09:00", "12:00", "18:00"], // Jueves
+      [], // Viernes
+      [], // Sábado
+    ],
   },
   p2: {
-    online: [["10:00", "14:00", "17:00"], [], ["10:00", "14:00", "17:00"], [], ["14:00", "17:00"], [], []],
-    presencial: [[], [], [], [], [], [], []],
+    online: [
+      [], // Domingo
+      ["09:00", "10:00", "11:00"], // Lunes
+      [], // Martes
+      ["14:00", "16:00", "18:00"], // Miércoles
+      [], // Jueves
+      ["13:00", "15:00", "19:00"], // Viernes
+      [], // Sábado
+    ],
+    presencial: [
+      [], // Domingo
+      [], // Lunes
+      ["09:00", "10:00", "12:00"], // Martes
+      [], // Miércoles
+      ["10:00", "13:00", "17:00"], // Jueves
+      [], // Viernes
+      [], // Sábado
+    ],
   },
   p3: {
-    online: [[], [], [], [], [], [], []],
-    presencial: [["08:00", "12:00"], [], ["16:00", "19:00"], [], ["12:00", "16:00"], ["08:00"], []],
+    online: [
+      [], // Domingo
+      ["11:00", "13:00", "17:00"], // Lunes
+      [], // Martes
+      ["10:00", "12:00", "14:00"], // Miércoles
+      [], // Jueves
+      ["09:00", "10:00", "11:00"], // Viernes
+      [], // Sábado
+    ],
+    presencial: [
+      [], // Domingo
+      [], // Lunes
+      ["09:00", "11:00", "15:00"], // Martes
+      [], // Miércoles
+      ["12:00", "16:00", "19:00"], // Jueves
+      [], // Viernes
+      [], // Sábado
+    ],
   },
   p4: {
-    online: [[], [], ["09:00"], [], [], [], []],
-    presencial: [[], [], ["13:00"], [], [], [], ["09:00"]],
+    online: [
+      [], // Domingo
+      ["09:00", "11:00", "13:00"], // Lunes
+      [], // Martes
+      ["14:00", "16:00", "18:00"], // Miércoles
+      [], // Jueves
+      ["10:00", "13:00", "15:00"], // Viernes
+      [], // Sábado
+    ],
+    presencial: [
+      [], // Domingo
+      [], // Lunes
+      ["09:00", "12:00", "17:00"], // Martes
+      [], // Miércoles
+      ["10:00", "14:00", "19:00"], // Jueves
+      [], // Viernes
+      [], // Sábado
+    ],
   },
 };
+
+
 
 const takenSlotIds = new Set<string>();
 const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));

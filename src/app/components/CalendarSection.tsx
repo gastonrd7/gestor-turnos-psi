@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/store";
+import AgendaFilters from "./CalendarFilter";
 import {
   loadInitial,
   loadWeeklySlotsForProfessional,
@@ -12,16 +13,18 @@ import {
 import type { Turno, Modalidad } from "@/domain/types";
 import toast from "react-hot-toast";
 
+
+
 import {
   addDays,
   formatDateLabel,
   formatTime,
   isSameDay,
   isoDayKeyUTC,
-  startOfDay,
-  startOfWeekMonday,
 } from "@/utils/date";
 import { groupSlotsByDate } from "@/utils/slots";
+import { getWindowDates, getWeekNavigation, filterProfessionals } from "@/utils/calendar";
+
 
 export default function AgendaSection() {
   const dispatch = useAppDispatch();
@@ -33,12 +36,9 @@ export default function AgendaSection() {
     dispatch(loadInitial());
   }, [dispatch]);
 
-  const today = startOfDay(new Date());
-  const windowStart = addDays(today, 1);
-  const windowEnd = addDays(windowStart, 15);
+  const { windowStart, windowEnd } = getWindowDates();
+  const { minWeekStart, maxWeekStart } = getWeekNavigation(windowStart, windowEnd);
 
-  const minWeekStart = startOfWeekMonday(windowStart);
-  const maxWeekStart = startOfWeekMonday(addDays(windowEnd, -1));
   const [weekOffset, setWeekOffset] = useState(0);
   const visibleWeekStart = addDays(minWeekStart, weekOffset * 7);
   const visibleDays = Array.from({ length: 7 }, (_, i) => addDays(visibleWeekStart, i));
@@ -51,15 +51,9 @@ export default function AgendaSection() {
   }, [visibleWeekStart, minWeekStart, maxWeekStart]);
 
   const filteredProfessionals = useMemo(() => {
-    return state.professionals.filter((p) => {
-      const matchesModalidad =
-        selectedModalidad === "todas" || p.modalidades.includes(selectedModalidad);
-      const matchesSpecialty =
-        state.selectedSpecialties.length === 0 ||
-        p.especialidades.some((e) => state.selectedSpecialties.includes(e));
-      return matchesModalidad && matchesSpecialty;
-    });
+    return filterProfessionals(state.professionals, state.selectedSpecialties, selectedModalidad);
   }, [state.professionals, state.selectedSpecialties, selectedModalidad]);
+  
 
   const isBooked = (turnoId: string) => state.booked.some((b) => b.turnoId === turnoId);
 
@@ -70,43 +64,15 @@ export default function AgendaSection() {
 
   return (
     <>
-      {/* Filtros */}
-      <div className="mb-4 flex flex-wrap items-center gap-2">
-        <label className="text-sm font-medium text-gray-700">Modalidad:</label>
-        <select
-          value={selectedModalidad}
-          onChange={(e) => setSelectedModalidad(e.target.value as Modalidad | "todas")}
-          className="rounded border border-gray-300 bg-white px-2 py-1 text-sm"
-        >
-          <option value="todas">Todas</option>
-          <option value="online">Online</option>
-          <option value="presencial">Presencial</option>
-        </select>
+      <AgendaFilters
+        selectedModalidad={selectedModalidad}
+        onModalidadChange={setSelectedModalidad}
+        selectedSpecialties={state.selectedSpecialties}
+        allSpecialties={state.specialties}
+        toggleSpecialty={(t) => dispatch(toggleSpecialty(t))}
+        clearSpecialties={() => dispatch(clearSpecialties())}
+      />
 
-        <span className="ml-4 mr-2 text-sm font-medium text-gray-700">Temáticas:</span>
-        {state.specialties.map((t) => {
-          const active = state.selectedSpecialties.includes(t);
-          return (
-            <button
-              key={t}
-              onClick={() => dispatch(toggleSpecialty(t))}
-              className={`rounded-full border px-3 py-1 text-xs font-medium transition ${
-                active
-                  ? "border-indigo-600 bg-indigo-600 text-white"
-                  : "border-gray-200 bg-white text-gray-700 hover:border-indigo-300 hover:bg-indigo-50"
-              }`}
-            >
-              {t}
-            </button>
-          );
-        })}
-        <button
-          onClick={() => dispatch(clearSpecialties())}
-          className="rounded-full border border-gray-200 bg-white px-3 py-1 text-xs font-medium text-gray-700 hover:border-indigo-300 hover:bg-indigo-50"
-        >
-          Ver todas
-        </button>
-      </div>
 
       {/* Controles de semana */}
       <div className="flex items-center justify-between pb-2">
