@@ -41,7 +41,6 @@ function hasStringProp<K extends string>(
 
 function isBookedSession(v: unknown): v is BookedSession {
   if (!isObject(v)) return false;
-  // specialty puede venir undefined desde persistencia vieja → lo aceptamos
   const specialtyOk =
     !("specialty" in v) || (typeof v.specialty === "string" && isSpecialty(v.specialty));
   return (

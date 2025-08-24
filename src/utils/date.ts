@@ -1,4 +1,3 @@
-// Helpers de fecha y formato (sin dependencias de React)
 export function startOfDay(d: Date) {
   const x = new Date(d);
   x.setHours(0, 0, 0, 0);
@@ -26,7 +25,6 @@ export function isSameDay(a: Date, b: Date) {
   );
 }
 
-/** Etiqueta corta en español: "jue 21/08" */
 /** Etiqueta corta en español: "jue 21/08", sin conversión horaria si es Argentina */
 export function formatDateLabel(d: Date, locale: string = "es-AR") {
   console.log(d, )

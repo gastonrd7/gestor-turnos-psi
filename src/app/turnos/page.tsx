@@ -7,7 +7,6 @@ import { loadInitial } from "@/store/sessionsSlice";
 
 export default function TurnosPage() {
   const dispatch = useAppDispatch();
-  // asegurar datos de profesionales para mostrar nombres
   useEffect(() => { dispatch(loadInitial()); }, [dispatch]);
 
   return <TurnosSection />;

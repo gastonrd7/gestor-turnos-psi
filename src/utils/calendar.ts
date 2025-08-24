@@ -1,4 +1,3 @@
-// utils/agendaUtils.ts
 import { addDays, startOfDay, startOfWeekMonday } from "@/utils/date";
 import type { Modalidad, Professional, Specialty } from "@/domain/types";
 

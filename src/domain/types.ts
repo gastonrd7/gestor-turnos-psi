@@ -17,7 +17,7 @@ export interface Professional {
   timezone: string;
   avatar?: string;
   isLow: boolean;
-  modalidades: Modalidad[]; // NUEVO: para saber qué tipo de sesiones ofrece
+  modalidades: Modalidad[];
   direccionConsultorio: string | null;
 }
 
@@ -29,8 +29,6 @@ export interface Turno {
   modalidad: Modalidad;
 }
 
-// types.ts o domain/types.ts
-
 
 export interface BookedSession {
   turnoId: string;
@@ -38,7 +36,7 @@ export interface BookedSession {
   startUtc: string;
   endUtc: string;
   specialty: Specialty;
-  modalidad: Modalidad; // NUEVO: el paciente también guarda la modalidad elegida
+  modalidad: Modalidad;
 }
 
 export interface ConfirmedSession extends BookedSession {

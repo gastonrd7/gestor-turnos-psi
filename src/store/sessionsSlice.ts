@@ -204,8 +204,6 @@ const sessionsSlice = createSlice({
     },
     removeConfirmed(state, action: PayloadAction<string>) {
       state.confirmed = state.confirmed.filter((c) => c.turnoId !== action.payload);
-      // Si querés que al eliminar un confirmado vuelva el slot disponible:
-      // acá podríamos llamar a un thunk que haga "unconfirm" + refetch.
     },
     hydrate(state, action: PayloadAction<Partial<SessionsState>>) {
       return { ...state, ...action.payload };

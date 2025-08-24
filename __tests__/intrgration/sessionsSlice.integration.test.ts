@@ -1,4 +1,3 @@
-// tests/integration/sessions.integration.test.ts
 import { configureStore } from "@reduxjs/toolkit";
 import reducer, {
   loadInitial,

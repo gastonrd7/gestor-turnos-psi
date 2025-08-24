@@ -5,8 +5,8 @@ describe("groupSlotsByDate", () => {
   const turnoBase: Turno = {
     id: "t1",
     professionalId: "p1",
-    startUtc: "", // se setea en cada test
-    endUtc: "", // se setea en cada test
+    startUtc: "",
+    endUtc: "",
     modalidad: "online",
   };
 

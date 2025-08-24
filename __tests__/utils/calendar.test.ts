@@ -1,5 +1,3 @@
-// __tests__/utils/agendaUtils.test.ts
-
 import { getWindowDates, getWeekNavigation, filterProfessionals } from "@/utils/calendar";
 import { addDays, startOfWeekMonday } from "@/utils/date";
 import type { Professional } from "@/domain/types";
