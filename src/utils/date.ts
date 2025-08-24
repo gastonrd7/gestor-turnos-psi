@@ -7,7 +7,7 @@ export function startOfDay(d: Date) {
 
 export function startOfWeekMonday(d: Date) {
   const x = startOfDay(d);
-  const diff = (x.getDay() + 6) % 7; // 0=Dom → 6; 1=Lun → 0; ... 6=Sáb → 5
+  const diff = (x.getDay() + 6) % 7;
   x.setDate(x.getDate() - diff);
   return x;
 }
