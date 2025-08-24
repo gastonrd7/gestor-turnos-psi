@@ -21,9 +21,9 @@ Este repositorio cuenta con CI/CD automatizado utilizando GitHub Actions, lo que
 
 Cada push o pull request a main ejecuta automáticamente:
 
--Verificación de linting con ESLint para asegurar calidad de código.
--Ejecución de todos los tests con Jest (unitarios e integrados).
--Validación de tipos con TypeScript para prevenir errores en tiempo de compilación.
+- Verificación de linting con ESLint para asegurar calidad de código.
+- Ejecución de todos los tests con Jest (unitarios e integrados).
+- Validación de tipos con TypeScript para prevenir errores en tiempo de compilación.
 
 Esta integración continua no solo mejora la confiabilidad del código, sino que permite una entrega continua ágil y segura. El workflow está configurado para escalar sin fricción a medida que el proyecto crece.
 
