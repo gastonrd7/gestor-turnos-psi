@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Challenge Product Engineer para PSI Mammoliti
 
-## Getting Started
+## Resumen
 
-First, run the development server:
+Este proyecto responde a lograr un MVP para completar el siguiente challenge:
+[Challenge product engineer](https://psimammoliti.notion.site/Challenge-Product-Engineer-2257bb70dfe5806c93d1d38fa0e64188)
+Sumandole que los turnos deben ser presencial / online.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Tecnologia utilizada
+
+- NextJS
+- TypeScript
+- Patrón flux (reduxjs/toolkit): para manejo del estado global.
+- Jest (test unitarios)
+- Nock (test integracion)
+- tailwindcss
+
+## CI (Integración Continua) / CD (Despliegue Continuo)
+
+Este repositorio cuenta con CI/CD automatizado utilizando GitHub Actions, lo que garantiza que cada cambio pase por una validación completa antes de ser integrado.
+
+Cada push o pull request a main ejecuta automáticamente:
+
+-Verificación de linting con ESLint para asegurar calidad de código.
+-Ejecución de todos los tests con Jest (unitarios e integrados).
+-Validación de tipos con TypeScript para prevenir errores en tiempo de compilación.
+
+Esta integración continua no solo mejora la confiabilidad del código, sino que permite una entrega continua ágil y segura. El workflow está configurado para escalar sin fricción a medida que el proyecto crece.
+
+## Instalacion y ejecucion de la web localmente
+
+Node: v20.19.4
+
+```
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+```
+npm run dev
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Frontend local: [http://localhost:3000](http://localhost:3000)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+npm run test
+```
